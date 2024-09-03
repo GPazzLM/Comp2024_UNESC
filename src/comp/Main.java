@@ -8,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        //***********************ANÁLISE LÉXICA******************************
         // Solicita ao usuário que insira o caminho do arquivo .txt
         //System.out.print("Insira o caminho do arquivo .txt: ");
         //String filePath = scanner.nextLine();
@@ -17,6 +18,8 @@ public class Main {
         Lexico lexico = new Lexico();
         lexico.executar(filePath);
 
+        
+        //***********************ANÁLISE SINTÁTICA***************************
         // Solicita ao usuário que insira o caminho do arquivo .txt
         //System.out.print("Insira o caminho do arquivo .txt: ");
         //String filePath1 = scanner.nextLine();

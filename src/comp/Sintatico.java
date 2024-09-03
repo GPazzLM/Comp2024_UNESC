@@ -4,8 +4,6 @@ import java.io.*;
 import java.util.*;
 
 public class Sintatico {
-	
-	private static final char SEP_LINHA = ' ';
 
     public void executar(String filePath) {
         // Verifica se o caminho do arquivo está correto
@@ -19,7 +17,7 @@ public class Sintatico {
         List<String> fileLines = readFile(filePath);
 
         System.out.println ();
-        System.out.println ("Aqui inicia-se a análise sintática (em desenvolvimento)");
+        System.out.println ("Aqui inicia-se a análise sintática, com os Tokens fornecidos (em desenvolvimento):");
         System.out.println(fileLines);
 
     }
@@ -29,7 +27,7 @@ public class Sintatico {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                lines.add(line + SEP_LINHA);
+                lines.add(line);
             }
         } catch (IOException e) {
             e.printStackTrace();

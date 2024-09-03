@@ -29,6 +29,16 @@ public class Lexico {
 
         // Exibe os resultados do processamento
         mostraResultados(fileLines, logTokens, logSaida);
+        
+        Scanner scanner = new Scanner(System.in);
+
+        // Solicita o caminho para salvar o arquivo de saída
+        //System.out.print("Insira o caminho para salvar o arquivo de saída (.txt): ");
+        //String outputFilePath = scanner.nextLine();
+        String outputFilePath  = ("C:/Users/glaucos.pazzeto/Documents/tokens.txt");
+        
+        // Salva os tokens e logs de erro no arquivo de saída
+        salvaEmArquivo(logTokens, logSaida, outputFilePath);
     }
 
     // Função que lê o arquivo e retorna as linhas com o caractere de separação adicionado
@@ -199,8 +209,8 @@ public class Lexico {
         } else {
             for (String log : logSaida) {
                 System.out.println(log);
-                System.out.println("Os dados fornecidos são inválidos.");
             }
+            System.out.println("Os dados fornecidos são inválidos.");
         }
     }
 
@@ -235,5 +245,29 @@ public class Lexico {
             return Objects.hash(token);
         }
     }
+
+    private static void salvaEmArquivo(List<LogToken> logTokens, List<String> logSaida, String outputFilePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
+            //writer.write("Tokens gerados:\n");
+            for (LogToken logToken : logTokens) {
+                //writer.write(logToken.getToken() + " [" + logToken.getProd() + "]\n");
+                writer.write(logToken.getToken() + "\n");
+            }
+    
+            /*writer.write("\nLogs de erro:\n");
+            if (logSaida.isEmpty()) {
+                writer.write("Nenhum erro léxico identificado.\n");
+            } else {
+                for (String log : logSaida) {
+                    writer.write(log + "\n");
+                }
+            }*/
+            System.out.println();
+            System.out.println("Dados de tokens gerados foram salvos em: " + outputFilePath);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar os dados no arquivo: " + e.getMessage());
+        }
+    }
+    
     
 }
