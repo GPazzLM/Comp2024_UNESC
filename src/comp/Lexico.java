@@ -37,8 +37,11 @@ public class Lexico {
         //String outputFilePath = scanner.nextLine();
         String outputFilePath  = ("C:/Users/glaucos.pazzeto/Documents/tokens.txt");
         
-        // Salva os tokens e logs de erro no arquivo de saída
-        salvaEmArquivo(logTokens, logSaida, outputFilePath);
+        // Salva os tokens em um arquivo .txt
+        salvaTokens(logTokens, logSaida, outputFilePath);
+        
+        // Salva os logs em um arquivo .txt
+        salvaLogs(fileLines, logSaida, outputFilePath);
     }
 
     // Função que lê o arquivo e retorna as linhas com o caractere de separação adicionado
@@ -67,7 +70,7 @@ public class Lexico {
             // Percorre cada caractere da linha
             while (index < length) {
                 char charAt = linha.charAt(index);
-
+                              
                 if (charAt != SEP_LINHA) {
                     // Se o caractere não for espaço ou tabulação, continua a formação da palavra
                     if (charAt != ' ' && charAt != '\t') {
@@ -75,6 +78,7 @@ public class Lexico {
                             // Se for alfanumérico, adiciona o caractere à palavra
                             palavra.append(charAt);
                         } else {
+                        	char specialChar = charAt;
                             // Se for um símbolo, processa a palavra anterior e o símbolo
                             if (palavra.length() > 0) {
                                 int token = recuperaToken(palavra.toString());
@@ -87,16 +91,47 @@ public class Lexico {
                                 palavra.setLength(0);
                             }
 
-                            // Processa o símbolo atual
-                            palavra.append(charAt);
-                            int token = recuperaToken(palavra.toString());
-                            if (token != 0) {
-                                logTokens.add(new LogToken(token, palavra.toString()));
+                            // Verifica se o símbolo atual é o caractere especial armazenado em 'specialChar'
+                            if (charAt == specialChar) {
+                                int count = 0;
+                                // Conta quantos caracteres 'specialChar' consecutivos existem
+                                while (index < length && linha.charAt(index) == specialChar) {
+                                    count++;
+                                    index++;
+                                }
+
+                                // Separa os caracteres 'specialChar' em pares, e se sobrar 1, coloca-o separadamente
+                                while (count > 0) {
+                                    if (count >= 2) {
+                                        palavra.append(specialChar).append(specialChar);  // Adiciona dois caracteres 'specialChar'
+                                        count -= 2;
+                                    } else {
+                                        palavra.append(specialChar);  // Adiciona o último caractere 'specialChar' sozinho
+                                        count--;
+                                    }
+
+                                    // Adiciona cada token separado
+                                    int token = recuperaToken(palavra.toString());
+                                    if (token != 0) {
+                                        logTokens.add(new LogToken(token, palavra.toString()));
+                                    } else {
+                                        logSaida.add("Erro léxico na linha " + linhaIndex + ": [" + palavra + "] não está na gramática.");
+                                        logTokens.add(new LogToken(token, palavra.toString() + " - Não reconhecido na gramática"));
+                                    }
+                                    palavra.setLength(0);
+                                }
                             } else {
-                                logSaida.add("Erro léxico na linha " + linhaIndex + ": [" + palavra + "] não está na gramática.");
-                                logTokens.add(new LogToken(token, palavra.toString() + " - Não reconhecido na gramática"));
+                                // Processa símbolos que não são o 'specialChar'
+                                palavra.append(charAt);
+                                int token = recuperaToken(palavra.toString());
+                                if (token != 0) {
+                                    logTokens.add(new LogToken(token, palavra.toString()));
+                                } else {
+                                    logSaida.add("Erro léxico na linha " + linhaIndex + ": [" + palavra + "] não está na gramática.");
+                                    logTokens.add(new LogToken(token, palavra.toString() + " - Não reconhecido na gramática"));
+                                }
+                                palavra.setLength(0);
                             }
-                            palavra.setLength(0);
                         }
                     } else {
                         // Processa a palavra anterior se houver espaço ou tabulação
@@ -246,7 +281,7 @@ public class Lexico {
         }
     }
 
-    private static void salvaEmArquivo(List<LogToken> logTokens, List<String> logSaida, String outputFilePath) {
+    private static void salvaTokens(List<LogToken> logTokens, List<String> logSaida, String outputFilePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
             //writer.write("Tokens gerados:\n");
             for (LogToken logToken : logTokens) {
@@ -254,20 +289,40 @@ public class Lexico {
                 writer.write(logToken.getToken() + "\n");
             }
     
-            /*writer.write("\nLogs de erro:\n");
-            if (logSaida.isEmpty()) {
-                writer.write("Nenhum erro léxico identificado.\n");
-            } else {
-                for (String log : logSaida) {
-                    writer.write(log + "\n");
-                }
-            }*/
             System.out.println();
-            System.out.println("Dados de tokens gerados foram salvos em: " + outputFilePath);
+            System.out.println("Dados de tokens salvos em: " + outputFilePath);
         } catch (IOException e) {
             System.out.println("Erro ao salvar os dados no arquivo: " + e.getMessage());
         }
     }
     
-    
+    private static void salvaLogs(List<String> fileLines, List<String> logSaida, String outputFilePath) {
+        // Extraindo o diretório do caminho do arquivo original
+        File originalFile = new File(outputFilePath);
+        String directory = originalFile.getParent();
+        
+        // Novo nome de arquivo
+        String additionalFilePath = directory + File.separator + "logs.txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(additionalFilePath))) {
+            writer.write("Conteúdo original do arquivo lido:\n");
+            
+            for (int i = 0; i < fileLines.size(); i++) {
+                writer.write("LINHA " + (i + 1) + ": " + fileLines.get(i).replace(SEP_LINHA, ' ') + "\n");
+            }
+            
+            if (logSaida.isEmpty()) {
+                writer.write("Nenhum erro léxico identificado.\n");
+            } else {
+            	writer.write("\nLogs de erro:\n");
+                for (String log : logSaida) {
+                    writer.write(log + "\n");
+                }
+            }
+            
+            System.out.println("Dados de logs salvos em: " + additionalFilePath);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar os dados adicionais no arquivo: " + e.getMessage());
+        }
+    }
 }
