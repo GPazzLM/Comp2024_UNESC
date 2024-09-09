@@ -70,7 +70,13 @@ public class Lexico {
             // Percorre cada caractere da linha
             while (index < length) {
                 char charAt = linha.charAt(index);
-                              
+                
+                
+             // Lista de caracteres que não devem ser separados em pares
+                Set<Character> specialCharExceptions = new HashSet<>(Arrays.asList(
+                    '{', '}', ';', ':', '/', ',', '*', '(', ')', '$', '!'
+                ));
+
                 if (charAt != SEP_LINHA) {
                     // Se o caractere não for espaço ou tabulação, continua a formação da palavra
                     if (charAt != ' ' && charAt != '\t') {
@@ -78,41 +84,41 @@ public class Lexico {
                             // Se for alfanumérico, adiciona o caractere à palavra
                             palavra.append(charAt);
                         } else {
-                        	char specialChar = charAt;
-                            // Se for um símbolo, processa a palavra anterior e o símbolo
+                            // Antes de processar o símbolo, verifica se há uma palavra pendente
                             if (palavra.length() > 0) {
+                                // Processa a palavra pendente
                                 int token = recuperaToken(palavra.toString());
-                                if (token != 0) {
+                                if (token != 999) {
                                     logTokens.add(new LogToken(token, palavra.toString()));
                                 } else {
                                     logSaida.add("Erro léxico na linha " + linhaIndex + ": [" + palavra + "] não está na gramática.");
                                     logTokens.add(new LogToken(token, palavra.toString() + " - Não reconhecido na gramática"));
                                 }
-                                palavra.setLength(0);
+                                palavra.setLength(0);  // Limpa a palavra após processá-la
                             }
 
-                            // Verifica se o símbolo atual é o caractere especial armazenado em 'specialChar'
-                            if (charAt == specialChar) {
+                            // Se o caractere não estiver na lista de exceções, aplica a lógica de separação em pares
+                            if (!specialCharExceptions.contains(charAt)) {
                                 int count = 0;
-                                // Conta quantos caracteres 'specialChar' consecutivos existem
-                                while (index < length && linha.charAt(index) == specialChar) {
+                                // Conta quantos caracteres consecutivos são iguais ao caractere atual
+                                while (index < length && linha.charAt(index) == charAt) {
                                     count++;
                                     index++;
                                 }
 
-                                // Separa os caracteres 'specialChar' em pares, e se sobrar 1, coloca-o separadamente
+                                // Separa os caracteres em pares, e se sobrar 1, coloca-o separadamente
                                 while (count > 0) {
                                     if (count >= 2) {
-                                        palavra.append(specialChar).append(specialChar);  // Adiciona dois caracteres 'specialChar'
+                                        palavra.append(charAt).append(charAt);  // Adiciona dois caracteres iguais
                                         count -= 2;
                                     } else {
-                                        palavra.append(specialChar);  // Adiciona o último caractere 'specialChar' sozinho
+                                        palavra.append(charAt);  // Adiciona o último caractere sozinho
                                         count--;
                                     }
 
                                     // Adiciona cada token separado
                                     int token = recuperaToken(palavra.toString());
-                                    if (token != 0) {
+                                    if (token != 999) {
                                         logTokens.add(new LogToken(token, palavra.toString()));
                                     } else {
                                         logSaida.add("Erro léxico na linha " + linhaIndex + ": [" + palavra + "] não está na gramática.");
@@ -121,10 +127,10 @@ public class Lexico {
                                     palavra.setLength(0);
                                 }
                             } else {
-                                // Processa símbolos que não são o 'specialChar'
+                                // Se o caractere estiver na lista de exceções, processa normalmente (não separa em pares)
                                 palavra.append(charAt);
                                 int token = recuperaToken(palavra.toString());
-                                if (token != 0) {
+                                if (token != 999) {
                                     logTokens.add(new LogToken(token, palavra.toString()));
                                 } else {
                                     logSaida.add("Erro léxico na linha " + linhaIndex + ": [" + palavra + "] não está na gramática.");
@@ -137,7 +143,7 @@ public class Lexico {
                         // Processa a palavra anterior se houver espaço ou tabulação
                         if (palavra.length() > 0) {
                             int token = recuperaToken(palavra.toString());
-                            if (token != 0) {
+                            if (token != 999) {
                                 logTokens.add(new LogToken(token, palavra.toString()));
                             } else {
                                 logSaida.add("Erro léxico na linha " + linhaIndex + ": [" + palavra + "] não está na gramática.");
@@ -146,7 +152,7 @@ public class Lexico {
                             palavra.setLength(0);
                         }
                     }
-                }
+                }                   
                 index++;
             }
         }
@@ -160,57 +166,80 @@ public class Lexico {
     // Função que mapeia uma palavra a um token específico
     private static int recuperaToken(String palavra) {
         switch (palavra) {
-            case "while":          return 1;
-            case "void":           return 2;
-            case "string":         return 3;
-            case "return":         return 4;
-            case "numerointeiro":  return 5;
-            case "numerofloat":    return 6;
-            case "nomevariavel":   return 7;
-            case "nomechar":       return 8;
-            case "nomedavariavel": return 9;
-            case "nomedastring":   return 10;
-            case "main":           return 11;
-            case "literal":        return 12;
-            case "integer":        return 13;
-            case "int":            return 14;
-            case "inicio":         return 15;
-            case "if":             return 16;
-            case "î":              return 17;
-            case "for":            return 18;
-            case "float":          return 19;
-            case "fim":            return 20;
-            case "else":           return 21;
-            case "double":         return 22;
-            case "do":             return 23;
-            case "cout":           return 24;
-            case "cin":            return 25;
-            case "char":           return 26;
-            case "callfuncao":     return 27;
-            case ">>":             return 28;
-            case ">=":             return 29;
-            case ">":              return 30;
-            case "==":             return 31;
-            case "=":              return 32;
-            case "<=":             return 33;
-            case "<<":             return 34;
-            case "<":              return 35;
-            case "++":             return 36;
-            case "+":              return 37;
-            case "{":              return 38;
-            case "}":              return 39;
-            case ";":              return 40;
-            case ":":              return 41;
-            case "/":              return 42;
-            case ",":              return 43;
-            case "*":              return 44;
-            case "(":              return 45;
-            case ")":              return 46;
-            case "$":              return 47;
-            case "!=":             return 48;
-            case "--":             return 49;
-            case "-":              return 50;
-            default:               return 0;
+        
+        case "write":              return 0;
+        case "while":              return 1;
+        case "until":              return 2;
+        case "to":                 return 3;
+        case "then":               return 4;
+        case "string":             return 5;
+        case "repeat":             return 6;
+        case "real":               return 7;
+        case "read":               return 8;
+        case "program":            return 9;
+        case "procedure":          return 10;
+        case "or":                 return 11;
+        case "of":                 return 12;
+        case "literal":            return 13;
+        case "integer":            return 14;
+        case "if":                 return 15;
+        case "identificador":      return 16;
+        case "î":                  return 17;
+        case "for":                return 18;
+        case "end":                return 19;
+        case "else":               return 20;
+        case "do":                 return 21;
+        case "declaravariaveis":   return 22;
+        case "const":              return 23;
+        case "char":               return 24;
+        case "chamaprocedure":     return 25;
+        case "begin":              return 26;
+        case "array":              return 27;
+        case "and":                return 28;
+        case ">=":                 return 29;
+        case ">":                  return 30;
+        case "=":                  return 31;
+        case "<>":                 return 32;
+        case "<=":                 return 33;
+        case "<":                  return 34;
+        case "+":                  return 35;
+        case "numreal":            return 36;
+        case "numinteiro":         return 37;
+        case "nomestring":         return 38;
+        case "nomechar":           return 39;
+        case "]":                  return 40;
+        case "[":                  return 41;
+        case ";":                  return 42;
+        case ":":                  return 43;
+        case "/":                  return 44;
+        case "..":                 return 45;
+        case ".":                  return 46;
+        case ",":                  return 47;
+        case "*":                  return 48;
+        case ")":                  return 49;
+        case "(":                  return 50;
+        case "$":                  return 51;
+        case "-":                  return 52;
+        default: {
+            // Regra 1: Se a palavra contiver apenas letras, retorna 38
+            if (palavra.matches("[a-zA-Z]+")) {
+                return 38;
+            }
+            // Regra 2: Se a palavra contiver um ou mais números, retorna 37
+            if (palavra.matches("\\d+")) {
+                return 37;
+            }
+            // Regra 3: Se a palavra contiver um número com ponto e vírgula, retorna 36
+            if (palavra.matches("\\d+,\\d+")) {
+                return 36;
+            }
+            // Regra 4: Se a palavra contiver apenas uma única letra, retorna 39
+            if (palavra.matches("[a-zA-Z]")) {
+                return 39;
+            }
+            // Nenhuma regra satisfeita, retorna 999
+            return 999;
+        }
         }
     }
 
