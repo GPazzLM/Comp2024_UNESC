@@ -6,7 +6,7 @@ import java.util.*;
 public class Lexico {
 
     // Caractere que indica o final de uma linha no arquivo
-    private static final char SEP_LINHA = '&';
+    private static final char SEP_LINHA = '@';
 
         // Método que contém a lógica principal, separado de "main"
         public void executar(String filePath) {
@@ -222,24 +222,31 @@ public class Lexico {
         case "-":                  return 52;
         default: {
             // Regra 1: Se a palavra contiver apenas letras, retorna 38
-            if (palavra.matches("[a-zA-Z]+")) {
+            String string = "\"";
+            if (palavra.matches(string)) {
                 return 38;
-            }
-            // Regra 2: Se a palavra contiver um ou mais números, retorna 37
-            if (palavra.matches("\\d+")) {
+            } else if (palavra.matches(string+"[a-zA-Z]+")) {
+                return 38;
+            } else if (palavra.matches("\\d+")) {
                 return 37;
-            }
-            // Regra 3: Se a palavra contiver um número com ponto e vírgula, retorna 36
-            if (palavra.matches("\\d+,\\d+")) {
+            } else if (palavra.matches("\\d+,\\d+")) {
                 return 36;
-            }
-            // Regra 4: Se a palavra contiver apenas uma única letra, retorna 39
-            if (palavra.matches("[a-zA-Z]")) {
+            } else if (palavra.matches("#")) {
                 return 39;
+            } else if (palavra.matches("#+[a-zA-Z]")) {
+                return 39;
+            } else if (palavra.matches("'+[a-zA-Z]+'")) {
+                return 13;
+            } else { //identificadores
+                return 16;
             }
+//            TODO: fazer a parte do nome das variaveis (identificador) e dos espaços
+//            if (palavra.matches("declaravariaveis ")) {
+//                return 13;
+//            }
             // Nenhuma regra satisfeita, retorna 999
-            return 999;
-        }
+//            return 999;
+          }
         }
     }
 
@@ -251,21 +258,17 @@ public class Lexico {
             System.out.println("LINHA " + (i + 1) + ": " + fileLines.get(i).replace(SEP_LINHA, ' '));
         }
 
-        System.out.println();
         System.out.println("Tokens gerados:");
         for (LogToken logToken : logTokens) {
             System.out.print(logToken.getToken() + " ");
         }
-        System.out.println();
 
-        System.out.println();
         System.out.println("Identificação dos tokens recuperados:");
         logTokens.stream()
                 //.distinct()
                 //.sorted(Comparator.comparingInt(LogToken::getToken))
                 .forEach(logToken -> System.out.println("[" + logToken.getToken() + "] " + logToken.getProd()));
 
-        System.out.println();
         System.out.println("Logs de erro:");
         if (logSaida.isEmpty()) {
             System.out.println("Nenhum erro léxico identificado.");
@@ -317,8 +320,7 @@ public class Lexico {
                 //writer.write(logToken.getToken() + " [" + logToken.getProd() + "]\n");
                 writer.write(logToken.getToken() + "\n");
             }
-    
-            System.out.println();
+
             System.out.println("Dados de tokens salvos em: " + outputFilePath);
         } catch (IOException e) {
             System.out.println("Erro ao salvar os dados no arquivo: " + e.getMessage());
