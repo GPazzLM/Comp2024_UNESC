@@ -94,7 +94,7 @@ public class Sintatico {
                         return;
                     }
 
-                    // Aplica a produção
+                    // Aplica a produção 
                     pilha.pop(); // Remove o não-terminal do topo
                     aplicarProducao(producao);
                 }
