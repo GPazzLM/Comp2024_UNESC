@@ -7,7 +7,7 @@ public class LogToken {
     private final String prod;
 
 
-    public LogToken(int token, String prod) {
+    public LogToken(int token, String prod, int linhaIndex) {
         this.token = token;
         this.prod = prod;
     }
@@ -32,4 +32,9 @@ public class LogToken {
     public int hashCode() {
         return Objects.hash(token);
     }
+
+	public String getLinhaIndex() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

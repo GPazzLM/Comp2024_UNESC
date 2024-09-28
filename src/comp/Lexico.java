@@ -20,9 +20,8 @@ class Lexico {
 
         processaDados(fileLines, logTokens, logSaida);
         mostraResultados(fileLines, logTokens, logSaida);
-        
-        String outputFilePath = "C:/Users/glaucos.pazzeto/Documents/tokens.txt";
-        //String outputFilePath = "/home/luana-agil/Downloads/Luana/Automato/AnalisadorLexico/tokens.txt";
+
+        String outputFilePath = "C:\\Users\\glaucos.pazzeto\\Documents\\tokens.txt";
         salvaTokens(logTokens, logSaida, outputFilePath);
         salvaLogs(fileLines, logSaida, outputFilePath);
     }
@@ -51,8 +50,23 @@ class Lexico {
             while (index < length) {
                 char charAt = linha.charAt(index);
 
-                // Ignora espaços em branco e comentarios
-                if (Character.isWhitespace(charAt) || isComentario(charAt)) {
+                //reconhece os comentários
+                if (charAt == '&' && index + 1 < length && linha.charAt(index + 1) == '&') {
+                    break;
+                }
+                if (charAt == '&') {
+                    index++;
+                    while (index < length && linha.charAt(index) != '&') {
+                        index++;
+                    }
+                    if (index < length) {
+                        index++;
+                    }
+                    continue;
+                }
+
+                // Ignora espaços em branco
+                if (Character.isWhitespace(charAt)) {
                     if (palavra.length() > 0) {
                         processaPalavra(palavra.toString(), logTokens, logSaida, linhaIndex);
                         palavra.setLength(0);
@@ -121,7 +135,7 @@ class Lexico {
                     continue;
                 }
 
-                // Tratamento de identificadores e números
+                // Identificadores e números
                 if (Character.isLetter(charAt) || charAt == '_') {
                     while (index < length && (Character.isLetterOrDigit(linha.charAt(index)) || linha.charAt(index) == '_')) {
                         palavra.append(linha.charAt(index));
@@ -152,7 +166,6 @@ class Lexico {
                     continue;
                 }
 
-                // Para qualquer outro caractere não esperado
                 palavra.append(charAt);
                 index++;
             }
@@ -166,12 +179,85 @@ class Lexico {
 
     private static void processaPalavra(String palavra, List<LogToken> logTokens, List<String> logSaida, int linhaIndex) {
         int token = recuperaToken(palavra);
+
+        // Verificações de erros
+        if (token == 16) {
+            if (isMaiorVinte(palavra)) {
+                logSaida.add("Erro léxico na linha " + linhaIndex + ": identificador [" + palavra + "] excede 20 caracteres.");
+                logTokens.add(new LogToken(token, palavra + " - Excede o limite de 20 caracteres.", linhaIndex));
+            } else if (isPossuiCaracterEspecial(palavra)) {
+                logSaida.add("Erro léxico na linha " + linhaIndex + ": identificador [" + palavra + "] contém caracteres especiais.");
+                logTokens.add(new LogToken(token, palavra + " - Contém caracteres especiais.", linhaIndex));
+            } else {
+                logTokens.add(new LogToken(token, palavra, linhaIndex));
+            }
+            return;
+        }
+
+        if (token == 39) {
+            if (isMaiorUm(palavra)) {
+                logSaida.add("Erro léxico na linha " + linhaIndex + ": char [" + palavra + "] contém mais de um caractere.");
+                logTokens.add(new LogToken(token, palavra + " - Contém mais de um caractere.", linhaIndex));
+                return;
+            }
+        }
+
+        if (token == 36) {
+            if (!isNumeroRealValido(palavra)) {
+                logSaida.add("Erro léxico na linha " + linhaIndex + ": número real [" + palavra + "] fora do intervalo permitido.");
+                logTokens.add(new LogToken(token, palavra + " - Fora do intervalo permitido.", linhaIndex));
+            } else {
+                logTokens.add(new LogToken(token, palavra, linhaIndex));
+            }
+            return;
+        }
+
+        if (token == 37) {
+            if (!isNumeroInteiroValido(palavra)) {
+                logSaida.add("Erro léxico na linha " + linhaIndex + ": número inteiro [" + palavra + "] fora do intervalo permitido.");
+                logTokens.add(new LogToken(token, palavra + " - Fora do intervalo permitido.", linhaIndex));
+            } else {
+                logTokens.add(new LogToken(token, palavra, linhaIndex));
+            }
+            return;
+        }
+
         if (token != 999) {
-            logTokens.add(new LogToken(token, palavra));
+            logTokens.add(new LogToken(token, palavra, linhaIndex));
         } else {
             logSaida.add("Erro léxico na linha " + linhaIndex + ": [" + palavra + "] não está na gramática.");
-            logTokens.add(new LogToken(token, palavra + " - Não reconhecido na gramática"));
+            logTokens.add(new LogToken(token, palavra + " - Não reconhecido na gramática", linhaIndex));
         }
+    }
+
+    private static boolean isNumeroRealValido(String palavra) {
+        try {
+            double numero = Double.parseDouble(palavra);
+            return numero >= -999.999 && numero <= 999.999;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private static boolean isNumeroInteiroValido(String palavra) {
+        try {
+            int numero = Integer.parseInt(palavra);
+            return numero >= -999 && numero <= 999;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private static boolean isMaiorVinte(String palavra){
+        return palavra.length() > 20;
+    }
+
+    private static boolean isMaiorUm(String palavra){
+        return palavra.length() > 2;
+    }
+
+    private static boolean isPossuiCaracterEspecial(String palavra){
+        return !palavra.matches("[a-zA-Z0-9]*");
     }
 
     private static int recuperaToken(String palavra) {
@@ -304,11 +390,11 @@ class Lexico {
 
         System.out.println("Tokens gerados:");
         for (LogToken logToken : logTokens) {
-            System.out.print(logToken.getToken() + " ");
+            System.out.print(logToken.getToken() + ", ");
         }
 
         System.out.println("\nIdentificação dos tokens recuperados:");
-        logTokens.forEach(logToken -> System.out.println("[" + logToken.getToken() + "] " + logToken.getProd()));
+        logTokens.forEach(logToken -> System.out.println("[" + logToken.getToken() + "]" +"; " +"LINHA " + logToken.getLinhaIndex() +"; " + logToken.getProd()));
 
         System.out.println("Logs de erro:");
         if (logSaida.isEmpty()) {
@@ -356,9 +442,6 @@ class Lexico {
             System.out.println("Erro ao salvar os dados adicionais no arquivo: " + e.getMessage());
         }
     }
-
-    private static boolean isComentario(char charAt){
-        String linha = String.valueOf(charAt);
-        return linha.matches("&") || linha.matches("&.*&");
-    }
 }
+
+
