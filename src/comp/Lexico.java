@@ -383,28 +383,33 @@ class Lexico {
     }
 
     private static void mostraResultados(List<String> fileLines, List<LogToken> logTokens, List<String> logSaida) {
-        System.out.println("\nConteúdo do arquivo:");
+        System.out.println("Conteúdo do arquivo:");
         for (int i = 0; i < fileLines.size(); i++) {
             System.out.println("LINHA " + (i + 1) + ": " + fileLines.get(i).replace(SEP_LINHA, ' '));
         }
-
+        
+        System.out.println("\n");
         System.out.println("Tokens gerados:");
         for (LogToken logToken : logTokens) {
             System.out.print(logToken.getToken() + ", ");
         }
-
+        
+        System.out.println("\n");
         System.out.println("\nIdentificação dos tokens recuperados:");
         logTokens.forEach(logToken -> System.out.println("[" + logToken.getToken() + "]" +"; " +"LINHA " + logToken.getLinhaIndex() +"; " + logToken.getProd()));
-
+        
+        System.out.println("\n");
         System.out.println("Logs de erro:");
         if (logSaida.isEmpty()) {
             System.out.println("Nenhum erro léxico identificado.");
             System.out.println("Dados validados com sucesso.");
+            System.out.println("\n");
         } else {
             for (String log : logSaida) {
                 System.out.println(log);
             }
             System.out.println("Os dados fornecidos são inválidos.");
+            System.out.println("\n");
         }
     }
 
