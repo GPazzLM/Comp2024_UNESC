@@ -1,13 +1,15 @@
-package comp;
+package comp.lexico;
 
 import java.io.*;
 import java.util.*;
 
-class Lexico {
+import comp.LogToken;
+
+public class Lexico {
 
     private static final char SEP_LINHA = '@';
 
-    void executar(String filePath) {
+    public void executar(String filePath) {
         File file = new File(filePath);
         if (!file.exists() || !file.isFile()) {
             System.out.println("Arquivo não encontrado ou caminho inválido.");

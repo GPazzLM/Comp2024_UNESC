@@ -2,6 +2,7 @@ package comp;
 
 import java.util.Scanner;
 
+import comp.lexico.Lexico;
 import comp.sintatico.Sintatico;
 
 public class Main {

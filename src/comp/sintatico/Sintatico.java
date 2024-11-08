@@ -23,79 +23,81 @@ public class Sintatico {
 
     private int[][] inicializaProducoes() {
         return new int[][]{
-                {9, 16, 42, 54, 46},
-                {22, 56, 57, 58},
-                {23, 16, 31, 59, 42, 60},
-                {17},
-                {16, 31, 59, 42, 60},
-                {17},
-                {22, 61, 43, 59, 42, 62},
-                {17},
-                {16, 63},
-                {47, 16, 63},
-                {17},
-                {61, 43, 59, 42, 62},
-                {17},
-                {27, 41, 37, 45, 37, 40, 12, 64},
-                {14},
-                {24},
-                {5},
-                {7},
-                {14},
-                {24},
-                {5},
-                {7},
-                {10, 16, 65, 57, 58, 42, 55},
-                {17},
-                {50, 61, 43, 59, 42, 62, 49},
-                {17},
-                {26, 66, 42, 67, 19},
-                {66, 42, 67},
-                {17},
-                {15, 40, 68, 41, 4, 26, 66, 19, 69},
-                {1, 40, 68, 41, 21, 26, 66, 19},
-                {6, 66, 2, 40, 68, 41},
-                {8, 50, 71, 49},
-                {25, 16, 72},
-                {0, 50, 73, 74, 49},
-                {18, 40, 16, 31, 68, 41, 3, 40, 68, 41, 21, 26, 66, 19},
-                {17},
-                {50, 61, 49},
-                {17},
-                {13},
-                {68},
-                {47, 73, 74},
-                {17},
-                {75, 76, 77},
-                {78, 79},
-                {37},
-                {16},
-                {38},
-                {39},
-                {36},
-                {50, 68, 49},
-                {31, 80},
-                {34, 80},
-                {30, 80},
-                {29, 80},
-                {33, 80},
-                {32, 80},
-                {17},
-                {35, 75, 76},
-                {52, 75, 76},
-                {75, 76},
-                {35, 75, 76},
-                {52, 75, 76},
-                {11, 75, 76},
-                {17},
-                {48, 78, 79},
-                {44, 78, 79},
-                {28, 78, 79},
-                {20, 26, 66, 19},
-                {17},
-                {16, 71},
-                {47, 16, 71},
-                {17}
+                {9, 16, 42, 54, 46}, //p0
+                {55, 56, 57, 58},  //P1
+                {23, 16, 31, 59, 42, 60}, //P2
+                {17}, //P3
+                {16, 31, 59, 42, 60},  //P4
+                {17}, //P5
+                {22, 61, 43, 59, 42, 62}, //P6
+                {17}, //P7
+                {16, 63},  //P8
+                {47, 16, 63},  //P9
+                {17}, //P10
+                {61, 43, 59, 42, 62},  //P11
+                {17}, //P12
+                {27, 41, 37, 45, 37, 40, 12, 64}, //P13
+                {14},  //P14
+                {24},  //P15
+                {5},  //P16
+                {7},  //P17
+                {14},  //P18
+                {24},  //P19
+                {5},  //P20
+                {7},  //P21
+                {10, 16, 65, 57, 58, 42, 55}, //P22
+                {17}, //P23
+                {50, 61, 43, 59, 42, 62, 49}, //P24
+                {17}, //P25
+                {26, 66, 42, 67, 19},  //P26
+                {66, 42, 67},  //P27
+                {17}, //P28
+                {15, 41, 68, 40, 4, 26, 66, 19, 69}, //P29
+                {1, 41, 68, 40, 21, 26, 66, 19}, //P30
+                {6, 66, 2, 41, 68, 40}, //P31
+                {8, 50, 70, 49},  //P32
+                {25, 16, 72},  //P33
+                {0, 50, 73, 74, 49},  //P34
+                {18, 41, 16, 31, 68, 40, 3, 41, 68, 40, 21, 26, 66, 19}, //P35
+                {17}, //P36
+                {50, 61, 49},  //P37
+                {17}, //P38
+                {13},  //P39
+                {68},  //P40
+                {47, 73, 74},  //P41
+                {17}, //P42
+                {75, 76, 77},  //P43
+                {78, 79},  //P44
+                {37},  //P45
+                {16},  //P46
+                {38},  //P47
+                {39},  //P48
+                {36},  //P49
+                {50, 68, 49},  //P50
+                {31, 80},  //P51
+                {34, 80},  //P52
+                {30, 80},  //P53
+                {29, 80},  //P54
+                {33, 80},  //P55
+                {32, 80},  //P56
+                {17}, //P57
+                {35, 75, 76},  //P58
+                {52, 75, 76},  //P59
+                {75, 76},  //P60
+                {35, 75, 76},  //P61
+                {52, 75, 76},  //P62
+                {11, 75, 76},  //P63
+                {17}, //P64
+                {48, 78, 79},  //P65
+                {44, 78, 79},  //P66
+                {28, 78, 79},  //P67
+                {17}, //P68
+                {20, 26, 66, 19},  //P69
+                {17}, //70
+                {16, 71},  //P71
+                {47, 16, 71},  //P72
+                {17}, //P73
+                {66,42,67}//P74
         };
     }
 
@@ -127,13 +129,23 @@ public class Sintatico {
         tabela[63][47] = 9;
         tabela[63][42] = 10;
         tabela[63][43] = 10;
+        tabela[62][26] = 12;
+        tabela[62][16] = 12;
         tabela[59][27] = 13;
         tabela[64][14] = 14;
         tabela[64][24] = 15;
         tabela[64][5] = 16;
         tabela[64][7] = 17;
+        tabela[59][14] = 18;
+        tabela[59][24] = 19;
+        tabela[59][5] = 20;
+        tabela[59][7] = 21;
+        tabela[55][26] = 23;
+        tabela[55][22] = 23;
+        tabela[55][23] = 23;
         tabela[58][22] = 26;
         tabela[58][26] = 26;
+        tabela[67][19] = 28;
         tabela[66][15] = 29;
         tabela[66][1] = 30;
         tabela[66][6] = 31;
@@ -142,7 +154,9 @@ public class Sintatico {
         tabela[66][0] = 34;
         tabela[66][18] = 35;
         tabela[66][19] = 36;
+        tabela[66][42] = 36;
         tabela[72][50] = 37;
+        tabela[72][19] = 38;
         tabela[72][42] = 38;
         tabela[73][13] = 39;
         tabela[73][16] = 40;
@@ -177,21 +191,34 @@ public class Sintatico {
         tabela[77][29] = 54;
         tabela[77][33] = 55;
         tabela[77][32] = 56;
+        tabela[77][40] = 57;
         tabela[77][42] = 57;
+        tabela[77][49] = 57;
         tabela[80][35] = 58;
         tabela[80][52] = 59;
         tabela[80][16] = 60;
+        tabela[80][37] = 60;
+        tabela[80][38] = 60;
         tabela[58][16] = 60;
         tabela[76][35] = 61;
         tabela[76][52] = 62;
         tabela[76][11] = 63;
         tabela[76][17] = 64;
+        tabela[76][31] = 64;
+        tabela[76][40] = 64;
+        tabela[76][43] = 64;
+        tabela[76][49] = 64;
         tabela[79][48] = 65;
         tabela[79][44] = 66;
         tabela[79][28] = 67;
         tabela[79][17] = 68;
+        tabela[79][31] = 68;
+        tabela[79][40] = 68;
+        tabela[79][43] = 68;
+        tabela[79][49] = 68;
         tabela[69][20] = 69;
         tabela[69][17] = 70;
+        tabela[69][42] = 70;
         tabela[70][16] = 71;
         tabela[71][47] = 72;
         tabela[71][49] = 73;
@@ -202,8 +229,9 @@ public class Sintatico {
     public void analisar(int[] tokens) {
         PILHA.push(53);
         int posicaoToken = 0;
-
+        System.out.println("Token: " + Arrays.toString(tokens));
         while (!PILHA.isEmpty()) {
+            imprimePilha();
             int topoPilha = PILHA.peek();
 
             if (isTerminal(topoPilha)) {
@@ -217,17 +245,16 @@ public class Sintatico {
                 }
             } else {
                 int entrada = TABELA_PARSING[topoPilha][tokens[posicaoToken]];
+                System.out.println("Entrada: "+entrada);
                 if (entrada != -1) {
                     PILHA.pop();
+                    System.out.println("Produção aplicada: "+Arrays.toString(PRODUCOES[entrada]));
                     empilhaProducao(entrada);
                 } else {
-                    System.out.println("topo "+topoPilha);
-                    System.out.println("token: "+tokens[posicaoToken]);
                     reportaErro(topoPilha, tokens[posicaoToken], posicaoToken);
                     break;
                 }
             }
-            imprimePilha();
         }
 
         if (PILHA.isEmpty() && posicaoToken == tokens.length) {
@@ -239,8 +266,6 @@ public class Sintatico {
 
     private void empilhaProducao(int producao) {
         int[] simbolos = PRODUCOES[producao];
-        System.out.println("Produção aplicada: " + Arrays.toString(PRODUCOES[0]));
-
         for (int i = simbolos.length - 1; i >= 0; i--) {
             if (!(simbolos[i] == 17)) { // Ignora produções vazias
                 PILHA.push(getCodigoSimbolo(simbolos[i]));
