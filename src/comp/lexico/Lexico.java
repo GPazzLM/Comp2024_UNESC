@@ -390,17 +390,17 @@ public class Lexico {
             System.out.println("LINHA " + (i + 1) + ": " + fileLines.get(i).replace(SEP_LINHA, ' '));
         }
         
-        System.out.println("\n");
+        System.out.println();
         System.out.println("Tokens gerados:");
         for (LogToken logToken : logTokens) {
             System.out.print(logToken.getToken() + ", ");
         }
         
-        System.out.println("\n");
+        System.out.println();
         System.out.println("\nIdentificação dos tokens recuperados:");
         logTokens.forEach(logToken -> System.out.println("[" + logToken.getToken() + "]" +"; " +"LINHA " + logToken.getLinhaIndex() +"; " + logToken.getProd()));
         
-        System.out.println("\n");
+        System.out.println();
         System.out.println("Logs de erro:");
         if (logSaida.isEmpty()) {
             System.out.println("Nenhum erro léxico identificado.");
@@ -411,7 +411,7 @@ public class Lexico {
                 System.out.println(log);
             }
             System.out.println("Os dados fornecidos são inválidos.");
-            System.out.println("\n");
+            System.out.println();
         }
     }
 
