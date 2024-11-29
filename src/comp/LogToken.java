@@ -5,11 +5,13 @@ import java.util.Objects;
 public class LogToken {
     private final int token;
     private final String prod;
+    private final int linhaIndex;
 
 
-    public LogToken(int token, String prod) {
+    public LogToken(int token, String prod, int linhaIndex) {
         this.token = token;
         this.prod = prod;
+        this.linhaIndex = linhaIndex;
     }
 
     public int getToken() {
@@ -18,6 +20,10 @@ public class LogToken {
 
     public String getProd() {
         return prod;
+    }
+
+    public int getLinhaIndex() {
+        return linhaIndex;
     }
 
     @Override
